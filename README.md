@@ -166,6 +166,7 @@ OpenShift follows a **control plane + worker node** model (like Kubernetes), but
    - Uses **Podman** and **libvirt** (Linux) or **Hyper-V** (Windows).
    - Free for developers.
    - **Requirements**: 4+ vCPU, 16GB+ RAM, 30GB disk.
+   - **Lab Guides:** **[Install-OpenShift-CRC-Ubuntu](https://github.com/SumonPaul18/openshift/blob/main/install-oshift-crc.md)**
 
 2. **OpenShift Local (successor to CRC)**
    - Newer, smoother experience (uses `crc` CLI).

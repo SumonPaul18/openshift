@@ -10,7 +10,7 @@
 oc apply -f - <<EOF
 apiVersion: v1
 kind: Namespace
-meta
+metadata:
   name: dev-team
 EOF
 
@@ -28,7 +28,7 @@ oc new-project dev-team
 # pod.yaml
 apiVersion: v1
 kind: Pod
-meta
+metadata:
   name: test-pod
   namespace: dev-team
 spec:
@@ -53,7 +53,7 @@ oc delete -f pod.yaml
 # deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
-meta
+metadata:
   name: web-app
   namespace: dev-team
 spec:
@@ -62,7 +62,7 @@ spec:
     matchLabels:
       app: web
   template:
-    meta
+    metadata:
       labels:
         app: web
     spec:
@@ -87,7 +87,7 @@ oc delete -f deployment.yaml
 ```yaml
 apiVersion: v1
 kind: Service
-meta
+metadata:
   name: web-svc
   namespace: dev-team
 spec:
@@ -109,7 +109,7 @@ spec:
 ```yaml
 apiVersion: route.openshift.io/v1
 kind: Route
-meta
+metadata:
   name: web-route
   namespace: dev-team
 spec:
@@ -139,7 +139,7 @@ CRC-এ **dynamic storage** অটো সেটআপ থাকে (`hostpath-pr
 # pvc.yaml
 apiVersion: v1
 kind: PersistentVolumeClaim
-meta
+metadata:
   name: web-pvc
   namespace: dev-team
 spec:
@@ -180,7 +180,7 @@ oc get pv
 ```yaml
 apiVersion: v1
 kind: ServiceAccount
-meta
+metadata:
   name: app-reader
   namespace: dev-team
 ```
@@ -189,7 +189,7 @@ meta
 ```yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
-meta
+metadata:
   name: pod-reader
   namespace: dev-team
 rules:
@@ -202,7 +202,7 @@ rules:
 ```yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
-meta
+metadata:
   name: read-pods
   namespace: dev-team
 subjects:
@@ -273,7 +273,7 @@ affinity:
 ```yaml
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
-meta
+metadata:
   name: allow-web-egress
   namespace: dev-team
 spec:
@@ -286,7 +286,7 @@ spec:
   - to:
     - namespaceSelector:
         matchLabels:
-          kubernetes.io/metadata.name: openshift-monitoring
+          kubernetes.io/metadata:data.name: openshift-monitoring
     ports:
     - protocol: TCP
       port: 443
@@ -700,12 +700,12 @@ Happy OpenShifting! 🚀
 ```yaml
 apiVersion: v1
 kind: Namespace
-meta
+metadata:
   name: demo-ns
 ---
 apiVersion: v1
 kind: Pod
-meta
+metadata:
   name: nginx-pod
   namespace: demo-ns
 spec:
@@ -738,7 +738,7 @@ oc delete ns demo-ns  # সব রিসোর্স একসাথে মু�
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
-meta
+metadata:
   name: nginx-deploy
   namespace: demo-app
 spec:
@@ -747,7 +747,7 @@ spec:
     matchLabels:
       app: nginx
   template:
-    meta
+    metadata:
       labels:
         app: nginx
     spec:
@@ -759,7 +759,7 @@ spec:
 ---
 apiVersion: v1
 kind: Service
-meta
+metadata:
   name: nginx-svc
   namespace: demo-app
 spec:
@@ -804,7 +804,7 @@ oc delete ns demo-app
 ```yaml
 apiVersion: route.openshift.io/v1
 kind: Route
-meta
+metadata:
   name: nginx-route
   namespace: demo-app
 spec:
@@ -838,7 +838,7 @@ oc delete -f route.yaml
 ```yaml
 apiVersion: v1
 kind: ConfigMap
-meta
+metadata:
   name: app-config
   namespace: demo-app
 
@@ -847,7 +847,7 @@ meta
 ---
 apiVersion: v1
 kind: Secret
-meta
+metadata:
   name: db-secret
   namespace: demo-app
 type: Opaque
@@ -861,7 +861,7 @@ data:
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
-meta
+metadata:
   name: app-with-config
   namespace: demo-app
 spec:
@@ -870,7 +870,7 @@ spec:
     matchLabels:
       app: configured-app
   template:
-    meta
+    metadata:
       labels:
         app: configured-app
     spec:
@@ -908,7 +908,7 @@ oc delete -f config-secret.yaml
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
-meta
+metadata:
   name: nodejs-app
   namespace: s2i-demo
 spec:
@@ -917,7 +917,7 @@ spec:
     matchLabels:
       app: nodejs
   template:
-    meta
+    metadata:
       labels:
         app: nodejs
     spec:
@@ -929,7 +929,7 @@ spec:
 ---
 apiVersion: route.openshift.io/v1
 kind: Route
-meta
+metadata:
   name: nodejs-route
   namespace: s2i-demo
 spec:
@@ -1102,7 +1102,7 @@ oc new-project redis-demo
 cat <<EOF | oc apply -f -
 apiVersion: operators.coreos.com/v1
 kind: OperatorGroup
-meta
+metadata:
   name: redis-operators
   namespace: redis-demo
 spec:
@@ -1114,7 +1114,7 @@ EOF
 cat <<EOF | oc apply -f -
 apiVersion: operators.coreos.com/v1alpha1
 kind: Subscription
-meta
+metadata:
   name: redis-operator
   namespace: redis-demo
 spec:
@@ -1132,7 +1132,7 @@ EOF
 cat <<EOF | oc apply -f -
 apiVersion: redis.redis.opstreelabs.io/v1beta1
 kind: Redis
-meta
+metadata:
   name: my-redis
   namespace: redis-demo
 spec:
@@ -1212,7 +1212,7 @@ oc get scc
 # root-pod.yaml
 apiVersion: v1
 kind: Pod
-meta
+metadata:
   name: root-pod
 spec:
   containers:
@@ -1261,7 +1261,7 @@ oc delete -f root-pod.yaml
 # argocd.yaml
 apiVersion: argoproj.io/v1alpha1
 kind: ArgoCD
-meta
+metadata:
   name: argocd
   namespace: argocd
 spec: {}

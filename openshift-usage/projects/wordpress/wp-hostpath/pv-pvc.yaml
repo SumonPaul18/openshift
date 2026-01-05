@@ -1,0 +1,57 @@
+# WordPress PV
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: wp-hostpath-pv
+spec:
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: manual-hostpath
+  hostPath:
+    path: /home/osu/wp/data/wordpress
+---
+# WordPress PVC
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: wordpress-pvc
+  namespace: demo-app
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+  storageClassName: manual-hostpath
+---
+# MySQL PV
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mysql-hostpath-pv
+spec:
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: manual-hostpath
+  hostPath:
+    path: /home/osu/wp/data/mysql
+---
+# MySQL PVC
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pvc
+  namespace: demo-app
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+  storageClassName: manual-hostpath

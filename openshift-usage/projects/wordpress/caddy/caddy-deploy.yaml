@@ -1,0 +1,73 @@
+# caddy-full.yaml
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: caddy-config
+  namespace: demo-app
+data:
+  Caddyfile: |
+    :8080 {
+        respond "Hello from Caddy on OpenShift CRC in a Desktop PC" 200
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: caddy-deploy
+  namespace: demo-app
+  labels:
+    app: caddy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: caddy
+  template:
+    metadata:
+      labels:
+        app: caddy
+    spec:
+      serviceAccountName: caddy-sa
+      containers:
+      - name: caddy
+        image: caddy:latest
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - name: caddy-config
+          mountPath: /etc/caddy/caddyfile
+          subPath: caddyfile
+      volumes:
+      - name: caddy-config
+        configMap:
+          name: caddy-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: caddy-svc
+  namespace: demo-app
+spec:
+  selector:
+    app: caddy
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: ClusterIP
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: caddy-route
+  namespace: demo-app
+spec:
+  to:
+    kind: Service
+    name: caddy-svc
+  port:
+    targetPort: 8080
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
